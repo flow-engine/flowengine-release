@@ -1,7 +1,7 @@
-# 安装指南
-***
-><span style="color: red; font-size: larger"> flowengine可以有两种部署方式，开源版本和基于第四范式aios部署的商业版本.
-> （差异为：商业版本中含基于aios的企业级特效，数据接入及基于AIOS studio产品的DAG Job执行能力）</span>
+# 快速安装体验指南
+>flowengine可以有两种部署方式：
+>* 开源版本
+>* 基于第四范式aios部署的商业版本（差异为：商业版本中含基于aios的企业级特性，数据接入及基于AIOS studio产品的DAG Job执行能力）
 ### 组成
 * fl-engine-manager
   * service:
