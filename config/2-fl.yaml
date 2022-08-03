@@ -1,0 +1,863 @@
+---
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: fl-enginemanager
+      namespace: flowengine
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRole
+    metadata:
+      annotations:
+        rbac.authorization.kubernetes.io/autoupdate: "true"
+      labels:
+        kubernetes.io/bootstrapping: rbac-defaults
+      name: fl-enginemanager-role
+    rules:
+      - apiGroups:
+          - "*"
+        resources:
+          - "*"
+        verbs:
+          - "*"
+  - apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: fl-enginemanager-role-binding
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: fl-enginemanager-role
+    subjects:
+      - kind: ServiceAccount
+        name: fl-enginemanager
+        namespace: flowengine
+---
+kind: List
+apiVersion: v1
+items:
+  - apiVersion: v1
+    data:
+      application.yml: |
+        app:
+            db:
+                host: '10.100.124.16'
+                name: 'sds'
+                password: ''
+                port: '3306'
+                username: 'root'
+            third:
+                es: '172.27.128.146:9200'
+                kafka: '172.27.128.146:9097'
+                rtidb_zk: '172.27.128.146:21891'
+                rtidb_path: '/rtidb_zk_root_path'
+            common:
+                prophet_url: 'http://172.27.128.146:40121'
+                market-url: http://fl-hub
+                manager-url: http://fl-engine-manager
+                aios-access-key: ${ACCESS_KEY:e5f1fc70-7d1d-4f60-9bd6-fd949078adad}
+        flyway:
+            enabled: 'true'
+        server:
+            port: 8080
+    kind: ConfigMap
+    metadata:
+      name: config-fl-data
+      namespace: flowengine
+  - apiVersion: v1
+    data:
+      hadoop.config.html: |-
+        <!DOCTYPE html><html><head>
+        <style>   body{color:#d4d4d4;background-color:#1e1e1e;line-height:1.3em;}#root dd span{color:#ce9178}#root dd span:first-child{color:#3a75af}    </style></head>
+        <body>    <dl id="root"></dl>
+        <script type="text/javascript">
+        var properties = '';
+         if(properties && properties.indexOf(':') > 0)
+         {  var list = properties.split('|');  var html = '';  for(var i=0;i<list.length;i++) {
+           let item = list[i]; if(item && item.indexOf(":") > 0) {let list = item.split(':');html += `<dd><span>${list[0]}
+           </span> : <span>${list[1]}</span></dd>`; }   }  document.getElementById('root').innerHTML = html;   }
+           </script></body> </html>
+      nginx.conf: |-
+        worker_processes 2;
+        events {
+          worker_connections 1024;
+          use epoll;
+        }
+
+        http {
+          tcp_nopush on;
+          keepalive_timeout 3600; #65
+          send_timeout 3600;
+          proxy_read_timeout 3600;
+          proxy_send_timeout 3600;
+          types_hash_max_size 2048;
+          server_tokens off;
+          server_names_hash_bucket_size 64;
+          server_name_in_redirect off;
+          include mime.types;
+          default_type application/octet-stream;
+          gzip on;
+          gzip_disable "msie6";
+          gzip_vary on;
+          gzip_proxied any;
+          gzip_comp_level 6;
+          gzip_buffers 16 8k;
+          gzip_http_version 1.1;
+          gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+          client_max_body_size 10240m;
+          server {
+            location / {
+               alias /www/html/elf-automl-desktop/;
+
+              etag off;
+              if ($request_filename ~* .*.(html|htm)$)
+              {
+                  expires -1;
+                  add_header Last-Modified '';
+              }
+            }
+
+            location /upload {
+              include /etc/nginx/uwsgi_params;
+              uwsgi_pass 127.0.0.1:9000;
+            }
+
+            location /engine {
+              alias /www/html/elf-automl-desktop/;
+
+              etag off;
+              if ($request_filename ~* .*.(html|htm)$)
+              {
+                  expires -1;
+                  add_header Last-Modified '';
+              }
+            }
+
+            location /sds {
+              alias /www/html/elf-sds-workbench/;
+
+              etag off;
+              if ($request_filename ~* .*.(html|htm)$)
+              {
+                  expires -1;
+                  add_header Last-Modified '';
+              }
+            }
+
+            location /flowengine-docs {
+              alias /www/html/flowengine-docs/;
+
+              etag off;
+              if ($request_filename ~* .*.(html|htm)$)
+              {
+                  expires -1;
+                  add_header Last-Modified '';
+              }
+            }
+          }
+        }
+    kind: ConfigMap
+    metadata:
+      name: config-elf-flowengine-bundled
+      namespace: flowengine
+  - apiVersion: v1
+    data:
+      application.properties: |
+        logging.path=./logs
+        server.port=8080
+        http.connection.max=50
+        http.connection.max.route=10
+        server.tomcat.basedir=.
+        server.tomcat.accesslog.enabled=true
+        server.tomcat.accesslog.buffered=false
+        server.tomcat.accesslog.pattern=%{yyyy-MM-dd HH:mm:ss.SSS Z}t\t%A\t%h\t%{Host}i\t%D\t%m\t%U\t%H\t%s\t%b\t%{X-Prophet-Tracing-v1}i\t"%{X-Prophet-Workspace-Id}i"\t"%{Referer}i"\t"%{User-Agent}i\t%{User-Token}c\t%{path}q"
+        server.tomcat.accesslog.directory=logs/access
+        server.tomcat.accesslog.prefix=access
+        server.tomcat.accesslog.fileDateFormat=.yyyy-MM-dd
+        server.tomcat.accesslog.suffix=.log
+        server.tomcat.accesslog.rename-on-rotate=true
+        server.tomcat.accesslog.rotate=true
+        server.tomcat.accesslog.request-attributes-enabled=true
+
+        db.host=10.100.124.16
+        db.port=3306
+        db.name=engine-manager
+        db.username=root
+        db.password=
+        db.jdbc_mysql_params=${JDBC_MYSQL_PARAMS:connectionCollation=utf8mb4_unicode_ci&useSSL=false&sessionVariables=time_zone%3d'%2B0%3A00'}
+        flyway.enabled=true
+        flyway.baselineOnMigrate=true
+        flyway.locations=db.migration
+        flyway.placeholder-prefix=#{
+        flyway.placeholders.automlImage=config-center:flow-engine
+        flyway.placeholders.selfLearnerImage=config-center:sc-self-learner
+        flyway.placeholders.batchPredictionImage=config-center:sc-batch-predictor
+        flyway.placeholders.onlinePredictionImage=config-center:predictor
+        flyway.placeholders.automlVersion=v1.4.0
+        flyway.placeholders.automlRegressionImage=config-center:flow-engine
+
+        spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+        spring.datasource.url=jdbc:mysql://${db.host}:${db.port}/${db.name}?${db.jdbc_mysql_params}
+        spring.datasource.username=${db.username}
+        spring.datasource.password=${db.password}
+        spring.datasource.validation-query=select 1
+        spring.datasource.test-on-borrow=true
+        spring.datasource.test-while-idle=true
+        spring.datasource.max-active=50
+
+        #flowengine自定义环境变量,形如:{'ENV1':'ENV_VALUE'}
+        fl.custom.podEnv.json={'AUTH_TYPE':'${fl.authType}'}
+        docker.registry.name=172.27.128.146:35000
+        fl.hub.url=http://fl-hub
+        fl.namespace=${MY_POD_NAMESPACE}
+        #enginemanger与engine是否在一个k8s集群,eg.本地调试使用
+        fl.isInSameK8s=true
+        #flowengine验证方式，简单验证basic，aios
+        fl.authType=basic
+        fl.basicAuth.account={'1':'YWRtaW46YWRtaW4='}
+        fl.skipAuthUris=/keystone/v1/sessions,/keystone/v1/token
+
+        #当运行模式为aios时生效
+        aios.namespace=prophet
+        aios.pas.server.host=172.27.128.146
+        aios.pas.server.port=40121
+        aios.pdms.url=http://172.27.128.146:40121
+        aios.common.accesskey=${ACCESS_KEY:e5f1fc70-7d1d-4f60-9bd6-fd949078adad}
+        aios.config-center.url=http://172.27.128.146:40121/config-center
+        aios.keystone.url=http://172.27.128.146:40121
+        aios.keystone.version=v1
+    kind: ConfigMap
+    metadata:
+      name: config-fl-engine-manager
+      namespace: flowengine
+  - apiVersion: v1
+    data:
+      application.properties: |
+        #tomcat
+        spring.main.banner-mode=log
+        server.port=8080
+        http.connection.max.route=10
+        http.connection.max=50
+        logging.path=./logs
+        logging.config=classpath:logback-prod.xml
+        spring.http.multipart.location=/tmp
+        spring.http.multipart.max-file-size=100MB
+        spring.http.multipart.max-request-size=100MB
+
+        #数据库相关
+        db.host=10.100.124.16
+        db.port=3306
+        db.name=solution-market
+        db.username=root
+        db.password=
+        spring.datasource.url=jdbc:mysql://${db.host}:${db.port}/${db.name}?useUnicode=yes&characterEncoding=UTF-8&createDatabaseIfNotExist=true&useLegacyDatetimeCode=false
+        spring.datasource.username=${db.username}
+        spring.datasource.password=${db.password}
+        spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+        spring.datasource.validation-query=select 1
+        spring.datasource.test-on-borrow=true
+        spring.datasource.test-while-idle=true
+        spring.datasource.max-active=50
+        mybatis.type-handlers-package=com._4paradigm.prophet.automl.engine.mapper.typehandler
+        mybatis.type-aliases-package=com._4paradigm.prophet.automl.engine.model
+        mybatis.configuration.mapUnderscoreToCamelCase=true
+        flyway.enabled=true
+        flyway.locations=db.migration
+        flyway.baseline-on-migrate=true
+        flyway.baseline-version=0
+        flyway.placeholder-replacement=false
+
+        #quartz.time=5000
+        #org.quartz.scheduler.instanceId=AUTO
+        #org.quartz.scheduler.skipUpdateCheck=true
+        #org.quartz.threadPool.class=org.quartz.simpl.SimpleThreadPool
+        #org.quartz.threadPool.threadCount=8
+        #org.quartz.jobStore.class = org.quartz.impl.jdbcjobstore.JobStoreTX
+        #org.quartz.jobStore.driverDelegateClass=org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+        #org.quartz.jobStore.isClustered=true
+        #org.quartz.jobStore.dataSource=ds
+        #org.quartz.dataSource.ds.driver=${spring.datasource.driver-class-name}
+        #org.quartz.dataSource.ds.URL=${spring.datasource.url}
+        #org.quartz.dataSource.ds.user=${spring.datasource.username}
+        #org.quartz.dataSource.ds.password=${spring.datasource.password}
+        #org.quartz.dataSource.ds.maxConnections=30
+        #org.quartz.dataSource.ds.validationQuery=select 0 from dual
+
+        asol.dir=/tmp/
+        solution.home=/opt/work/solution
+        solution.script.home = /opt/work/script/solution_template/
+        solution.job.file.template.home = /opt/work/script/job_file_template
+        running.env=${RUNNING_ENV:aio}
+        #单位是B,默认50M
+        smallfile.upload.maxSize=52428800
+        smallfile.upload.tempPath=/opt/work/temp/smallfile/
+        asol.package.path=/tmp/test/
+        asol.update.force=true
+        component.package.path=/opt/work/package/asol/component/
+        job.package.path=/opt/work/package/asol/jobs/
+        context.package.path=/opt/work/package/asol/context
+        fl.engineManagerUrl=http://fl-engine-manager
+        aios.common.accesskey=${ACCESS_KEY:e5f1fc70-7d1d-4f60-9bd6-fd949078adad}
+    kind: ConfigMap
+    metadata:
+      name: config-fl-hub
+      namespace: flowengine
+---
+kind: List
+apiVersion: v1
+items:
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        app: elf-flowengine-bundled
+      name: elf-flowengine-bundled
+      namespace: flowengine
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: elf-flowengine-bundled
+      strategy:
+        rollingUpdate:
+          maxSurge: 1
+          maxUnavailable: 0
+        type: RollingUpdate
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            app: elf-flowengine-bundled
+          name: elf-flowengine-bundled
+        spec:
+          containers:
+            - env:
+                - name: MY_POD_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: metadata.namespace
+                - name: MY_NODE_NAME
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: spec.nodeName
+                - name: MY_CPU_REQUEST
+                  valueFrom:
+                    resourceFieldRef:
+                      containerName: elf-flowengine-bundled
+                      divisor: "0"
+                      resource: requests.cpu
+                - name: MY_CPU_LIMIT
+                  valueFrom:
+                    resourceFieldRef:
+                      containerName: elf-flowengine-bundled
+                      divisor: "0"
+                      resource: limits.cpu
+                - name: MY_MEM_REQUEST
+                  valueFrom:
+                    resourceFieldRef:
+                      containerName: elf-flowengine-bundled
+                      divisor: "0"
+                      resource: requests.memory
+                - name: MY_MEM_LIMIT
+                  valueFrom:
+                    resourceFieldRef:
+                      containerName: elf-flowengine-bundled
+                      divisor: "0"
+                      resource: limits.memory
+                - name: TZ
+                  value: Asia/Shanghai
+              image: docker.4pd.io/env/release/1.6.2-standalone/prophet/app/elf-flowengine-bundled.tar:pipe-525-commit-502b83b6
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                failureThreshold: 3
+                initialDelaySeconds: 180
+                periodSeconds: 30
+                successThreshold: 1
+                tcpSocket:
+                  port: 80
+                timeoutSeconds: 10
+              name: elf-flowengine-bundled
+              readinessProbe:
+                failureThreshold: 3
+                initialDelaySeconds: 5
+                periodSeconds: 5
+                successThreshold: 1
+                tcpSocket:
+                  port: 80
+                timeoutSeconds: 5
+              resources:
+                limits:
+                  cpu: 500m
+                  memory: 500Mi
+                requests:
+                  cpu: "0"
+                  memory: "0"
+              volumeMounts:
+                - mountPath: /app/prophet/logs
+                  name: log-volume
+                - mountPath: /etc/nginx/nginx.conf
+                  name: config-nginx-conf
+                  subPath: nginx.conf
+                - mountPath: /www/html/extra_static/t/hadoop.config.html
+                  name: config-nginx-conf
+                  subPath: hadoop.config.html
+              workingDir: /opt/work
+          dnsPolicy: ClusterFirst
+          imagePullSecrets:
+            - name: docker-secret
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - emptyDir: {}
+              name: log-volume
+            - configMap:
+                defaultMode: 420
+                items:
+                  - key: nginx.conf
+                    path: nginx.conf
+                  - key: hadoop.config.html
+                    path: hadoop.config.html
+                name: config-elf-flowengine-bundled
+              name: config-nginx-conf
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        app: fl-engine-manager
+      name: fl-engine-manager
+      namespace: flowengine
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: fl-engine-manager
+      strategy:
+        rollingUpdate:
+          maxSurge: 1
+          maxUnavailable: 1
+        type: RollingUpdate
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            app: fl-engine-manager
+          name: fl-engine-manager
+        spec:
+          containers:
+            - env:
+                - name: JAVA_OPTS
+                  value: -Xmx1500M -Xms1500M -Xmn1000M
+                - name: MY_POD_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: metadata.namespace
+                - name: MY_NODE_NAME
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: spec.nodeName
+                - name: MY_CPU_REQUEST
+                  valueFrom:
+                    resourceFieldRef:
+                      containerName: app
+                      divisor: "0"
+                      resource: requests.cpu
+                - name: MY_CPU_LIMIT
+                  valueFrom:
+                    resourceFieldRef:
+                      containerName: app
+                      divisor: "0"
+                      resource: limits.cpu
+                - name: MY_MEM_REQUEST
+                  valueFrom:
+                    resourceFieldRef:
+                      containerName: app
+                      divisor: "0"
+                      resource: requests.memory
+                - name: MY_MEM_LIMIT
+                  valueFrom:
+                    resourceFieldRef:
+                      containerName: app
+                      divisor: "0"
+                      resource: limits.memory
+                - name: TZ
+                  value: Asia/Shanghai
+                - name: JDBC_MYSQL_PARAMS
+                  value: useSSL=false&useUnicode=yes&characterEncoding=UTF-8&createDatabaseIfNotExist=true&serverTimezone=GMT%2B8
+                - name: RUNNINGENV
+                  value: aios
+              image: docker.4pd.io/env/release/1.6.3/prophet/app/engine-manager.tar:pipe-812-commit-171bb7e2
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 300
+                periodSeconds: 20
+                successThreshold: 1
+                timeoutSeconds: 3
+              name: app
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                periodSeconds: 20
+                successThreshold: 1
+                timeoutSeconds: 3
+              resources:
+                limits:
+                  cpu: "1"
+                  memory: 2Gi
+#                requests:
+#                  cpu: "1"
+#                  memory: 2Gi
+              volumeMounts:
+                - mountPath: /app/conf/application.properties
+                  name: fl-engine-manager-cm
+                  subPath: application.properties
+              workingDir: /app
+          dnsPolicy: ClusterFirst
+          imagePullSecrets:
+            - name: docker-secret
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          serviceAccount: fl-enginemanager
+          serviceAccountName: fl-enginemanager
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - configMap:
+                defaultMode: 420
+                name: config-fl-engine-manager
+              name: fl-engine-manager-cm
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      annotations:
+      labels:
+        app: fl-data
+      name: fl-data
+      namespace: flowengine
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: fl-data
+      strategy:
+        rollingUpdate:
+          maxSurge: 1
+          maxUnavailable: 1
+        type: RollingUpdate
+      template:
+        metadata:
+          creationTimestamp: null
+          labels:
+            app: fl-data
+          name: fl-data
+        spec:
+          containers:
+            - env:
+                - name: JAVA_OPTS
+                  value: -Xmx1500M -Xms1500M -Xmn1000M
+                - name: MY_POD_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: metadata.namespace
+                - name: MY_NODE_NAME
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: spec.nodeName
+                - name: MY_CPU_REQUEST
+                  valueFrom:
+                    resourceFieldRef:
+                      containerName: app
+                      divisor: "0"
+                      resource: requests.cpu
+                - name: MY_CPU_LIMIT
+                  valueFrom:
+                    resourceFieldRef:
+                      containerName: app
+                      divisor: "0"
+                      resource: limits.cpu
+                - name: MY_MEM_REQUEST
+                  valueFrom:
+                    resourceFieldRef:
+                      containerName: app
+                      divisor: "0"
+                      resource: requests.memory
+                - name: MY_MEM_LIMIT
+                  valueFrom:
+                    resourceFieldRef:
+                      containerName: app
+                      divisor: "0"
+                      resource: limits.memory
+                - name: JDBC_MYSQL_PARAMS
+                  value: connectionCollation=utf8mb4_unicode_ci&useSSL=false&sessionVariables=time_zone%3d'%2B0%3A00'
+                - name: PROPHET_LANG
+                  value: zh-CN
+                - name: TZ
+                  value: Asia/Shanghai
+                - name: ACCESS_KEY
+                  value: e5f1fc70-7d1d-4f60-9bd6-fd949078adad
+              image: docker.4pd.io/env/release/1.6.3/prophet/app/sds-workbench.tar:pipe-1327-commit-559749f7
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 300
+                periodSeconds: 20
+                successThreshold: 1
+                timeoutSeconds: 3
+              name: app
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                periodSeconds: 20
+                successThreshold: 1
+                timeoutSeconds: 3
+              resources:
+                limits:
+                  cpu: "1"
+                  memory: 2Gi
+                requests:
+                  cpu: 0
+                  memory: 0
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              volumeMounts:
+                - mountPath: /opt/work/config/application.yml
+                  name: fl-data-cm
+                  subPath: application.yml
+              workingDir: /opt/work
+          dnsPolicy: ClusterFirst
+          imagePullSecrets:
+            - name: docker-secret
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - configMap:
+                defaultMode: 420
+                name: config-fl-data
+              name: fl-data-cm
+  - apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      labels:
+        app: fl-hub
+      name: fl-hub
+      namespace: flowengine
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          app: fl-hub
+      strategy:
+        rollingUpdate:
+          maxSurge: 1
+          maxUnavailable: 1
+        type: RollingUpdate
+      template:
+        metadata:
+          labels:
+            app: fl-hub
+          name: fl-hub
+        spec:
+          containers:
+            - env:
+                - name: JAVA_OPTS
+                  value: -Xmx800M -Xms800M -Xmn500M
+                - name: MY_POD_NAMESPACE
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: metadata.namespace
+                - name: MY_NODE_NAME
+                  valueFrom:
+                    fieldRef:
+                      apiVersion: v1
+                      fieldPath: spec.nodeName
+                - name: MY_CPU_REQUEST
+                  valueFrom:
+                    resourceFieldRef:
+                      containerName: app
+                      divisor: "0"
+                      resource: requests.cpu
+                - name: MY_CPU_LIMIT
+                  valueFrom:
+                    resourceFieldRef:
+                      containerName: app
+                      divisor: "0"
+                      resource: limits.cpu
+                - name: MY_MEM_REQUEST
+                  valueFrom:
+                    resourceFieldRef:
+                      containerName: app
+                      divisor: "0"
+                      resource: requests.memory
+                - name: MY_MEM_LIMIT
+                  valueFrom:
+                    resourceFieldRef:
+                      containerName: app
+                      divisor: "0"
+                      resource: limits.memory
+                - name: JDBC_MYSQL_PARAMS
+                  value: connectionCollation=utf8mb4_unicode_ci&useSSL=false&sessionVariables=time_zone%3d'%2B0%3A00'
+                - name: TZ
+                  value: Asia/Shanghai
+              image: docker.4pd.io/env/release/1.6.3/prophet/app/solution-market.tar:pipe-1378-commit-fa28d23f
+              imagePullPolicy: IfNotPresent
+              livenessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                initialDelaySeconds: 300
+                periodSeconds: 20
+                successThreshold: 1
+                timeoutSeconds: 3
+              name: app
+              readinessProbe:
+                failureThreshold: 3
+                httpGet:
+                  path: /health
+                  port: 8080
+                  scheme: HTTP
+                periodSeconds: 20
+                successThreshold: 1
+                timeoutSeconds: 3
+              resources:
+                limits:
+                  cpu: "1"
+                  memory: 1Gi
+#                requests:
+#                  cpu: 0
+#                  memory: 0
+              volumeMounts:
+                - mountPath: /opt/work/config/application.properties
+                  name: fl-hub-cm
+                  subPath: application.properties
+                - mountPath: /opt/work/package
+                  name: asol-repository-data
+              workingDir: /opt/work
+          dnsPolicy: ClusterFirst
+          imagePullSecrets:
+            - name: docker-secret
+#          initContainers:
+#            - command:
+#                - cp
+#                - -rf
+#                - /opt/work/package/asol
+#                - ./
+#              image: docker.4pd.io/env/release/2.0.3/prophet/app/cess-news-solution.tar:pipe-389-commit-b9bad888
+#              imagePullPolicy: IfNotPresent
+#              name: mount-asol-package
+#              resources:
+#                limits:
+#                  cpu: "1"
+#                  memory: 200M
+#                requests:
+#                  cpu: "0"
+#                  memory: "0"
+#              volumeMounts:
+#                - mountPath: /data/target
+#                  name: asol-repository-data
+#              workingDir: /data/target
+          restartPolicy: Always
+          schedulerName: default-scheduler
+          securityContext: {}
+          terminationGracePeriodSeconds: 30
+          volumes:
+            - configMap:
+                defaultMode: 420
+                name: config-fl-hub
+              name: fl-hub-cm
+            - emptyDir: {}
+              name: asol-repository-data
+---
+kind: List
+apiVersion: v1
+items:
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: elf-flowengine-bundled
+      namespace: flowengine
+    spec:
+      ports:
+        - name: http
+          port: 80
+          protocol: TCP
+          targetPort: 80
+      selector:
+        app: elf-flowengine-bundled
+      sessionAffinity: None
+      type: ClusterIP
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      labels:
+        app: fl-engine-manager
+      name: fl-engine-manager
+      namespace: flowengine
+    spec:
+      ports:
+        - name: http
+          port: 80
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        app: fl-engine-manager
+      sessionAffinity: None
+      type: ClusterIP
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: fl-data
+      namespace: flowengine
+    spec:
+      ports:
+        - name: http
+          port: 80
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        app: fl-data
+      sessionAffinity: None
+      type: ClusterIP
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: fl-hub
+      namespace: flowengine
+    spec:
+      ports:
+        - name: http
+          port: 80
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        app: fl-hub
+      sessionAffinity: None
+      type: ClusterIP
