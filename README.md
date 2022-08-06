@@ -37,8 +37,8 @@
 > (minikube:https://www.liujiajia.me/2022/5/28/manual-import-image-to-minikube)
 * mysql 5.7+
 #### 依赖镜像
-* flowengine（链接: https://pan.baidu.com/s/1SdzWCIO37UKfqOHhcfP4yQ 提取码: v6ee）
-* traefik
+* flowengine（需手工下载，链接: https://pan.baidu.com/s/1SdzWCIO37UKfqOHhcfP4yQ 提取码: v6ee）
+* traefik（直接拉取）
 
 ### 操作步骤
 > 确保将系统依赖的镜像上传到镜像仓库，并保证与K8s deploy yaml中镜像地址保持一致。
