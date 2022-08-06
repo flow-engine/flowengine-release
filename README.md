@@ -183,6 +183,8 @@ metadata:
 > 如果是minikube启动，请使用：
 > ` minikube service fl-traefik -n flowengine` 映射本地地址，登陆访问。
 
+> 注意，创建引擎的方案可使用云盘中方案，另外引擎绑定的数据库地址应在"设定"->"数据库配置信息"中修改正确
+
 
 
 
