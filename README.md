@@ -32,7 +32,9 @@
 > minikube start --image-mirror-country='cn' --cpus=4 --memory=8192m
 >```
 > 也可使用kind（https://kind.sigs.k8s.io/）或者k3s
-> 对于kind和minikube注意如果是外部导入镜像，应手工导入到集群内部（https://kind.sigs.k8s.io/docs/user/quick-start/#loading-an-image-into-your-cluster）
+> 对于kind和minikube注意如果是外部导入镜像，应手工导入到集群内部
+> (kind:https://kind.sigs.k8s.io/docs/user/quick-start/#loading-an-image-into-your-cluster）
+> (minikube:https://www.liujiajia.me/2022/5/28/manual-import-image-to-minikube)
 * mysql 5.7+
 #### 依赖镜像
 * flowengine（链接: https://pan.baidu.com/s/1SdzWCIO37UKfqOHhcfP4yQ 提取码: v6ee）
