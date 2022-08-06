@@ -35,7 +35,7 @@
 > 对于kind和minikube注意如果是外部导入镜像，应手工导入到集群内部（https://kind.sigs.k8s.io/docs/user/quick-start/#loading-an-image-into-your-cluster）
 * mysql 5.7+
 #### 依赖镜像
-* flowengine
+* flowengine（链接: https://pan.baidu.com/s/1SdzWCIO37UKfqOHhcfP4yQ 提取码: v6ee）
 * traefik
 
 ### 操作步骤
