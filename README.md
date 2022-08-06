@@ -31,6 +31,8 @@
 > sudo install minikube-darwin-amd64 /usr/local/bin/minikube
 > minikube start --image-mirror-country='cn' --cpus=4 --memory=8192m
 >```
+> 也可使用kind（https://kind.sigs.k8s.io/）或者k3s
+> 对于kind和minikube注意如果是外部导入镜像，应手工导入到集群内部（https://kind.sigs.k8s.io/docs/user/quick-start/#loading-an-image-into-your-cluster）
 * mysql 5.7+
 #### 依赖镜像
 * flowengine
