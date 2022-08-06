@@ -156,7 +156,8 @@ VALUES
 ```
 
 可以通过以下配置创建flowengine管理的ns，创建fl-ns.yaml,内容如下：
-```apiVersion: v1
+```
+apiVersion: v1
 kind: Namespace
 metadata:
   annotations:
