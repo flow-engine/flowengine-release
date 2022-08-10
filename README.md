@@ -1,7 +1,7 @@
-# 安装指南
-***
-><span style="color: red; font-size: larger"> flowengine可以有两种部署方式，开源版本和基于第四范式aios部署的商业版本.
-> （差异为：商业版本中含基于aios的企业级特效，数据接入及基于AIOS studio产品的DAG Job执行能力）</span>
+# 快速安装体验指南
+>flowengine可以有两种部署方式：
+>* 开源版本
+>* 基于第四范式aios部署的商业版本（差异为：商业版本中含基于aios的企业级特性，数据接入及基于AIOS studio产品的DAG Job执行能力）
 ### 组成
 * fl-engine-manager
   * service:
@@ -31,10 +31,14 @@
 > sudo install minikube-darwin-amd64 /usr/local/bin/minikube
 > minikube start --image-mirror-country='cn' --cpus=4 --memory=8192m
 >```
+> 也可使用kind（https://kind.sigs.k8s.io/）或者k3s
+> 对于kind和minikube注意如果是外部导入镜像，应手工导入到集群内部
+> (kind:https://kind.sigs.k8s.io/docs/user/quick-start/#loading-an-image-into-your-cluster）
+> (minikube:https://www.liujiajia.me/2022/5/28/manual-import-image-to-minikube)
 * mysql 5.7+
 #### 依赖镜像
-* flowengine
-* traefik
+* flowengine（需手工下载，链接: https://pan.baidu.com/s/1SdzWCIO37UKfqOHhcfP4yQ 提取码: v6ee）
+* traefik（直接拉取）
 
 ### 操作步骤
 > 确保将系统依赖的镜像上传到镜像仓库，并保证与K8s deploy yaml中镜像地址保持一致。
@@ -142,17 +146,9 @@ flowengine启动配置一般在configmap中修改。如下：
 > 注意有些版本的mysql不兼容数据库名存在"-"，应先在数据库中通过
 ``create database `engine-manager` ``手工创建
 
-注意: 如果是使用minikube安装flowengine，由于兼容性原因，请执行
-``` 
-INSERT INTO `automl_manager_dict_value` (`id`, `dict_id`, `value_name`, `value_code`, `value`, `remark`, `value_order`)
-VALUES
-	(10, 4, 'enginekernel ingress template', 'engine_kernel_ingress_template', '{\n \"apiVersion\": \"networking.k8s.io/v1\",\n  \"kind\": \"Ingress\",\n  \"metadata\": {\n   \"annotations\": {\n      \"traefik.ingress.kubernetes.io/router.middlewares\": \"flowengine-fl-stripurl@kubernetescrd\",\n     \"traefik.ingress.kubernetes.io/router.entrypoints\": \"flowengine\"\n    },\n    \"labels\": {\n     \"app\": \"fl-traefik\"\n   },\n    \"name\": \"${ingressName}\"\n  },\n  \"spec\": {\n   \"rules\": [{\n     \"http\": {\n       \"paths\": [{\n           \"backend\": {\n              \"service\": {\n                \"name\": \"${serviceName}\",\n               \"port\": {\n                 \"number\": ${servicePort}\n                }\n             }\n           },\n            \"path\": \"/automl-engine/${relModuleId}/${engineKey}/\",\n            \"pathType\": \"Prefix\"\n          },\n          {\n           \"backend\": {\n              \"service\": {\n                \"name\": \"${serviceName}\",\n               \"port\": {\n                 \"number\": ${servicePort}\n                }\n             }\n           },\n            \"path\": \"/automl-engine/${moduleId}/\",\n            \"pathType\": \"Prefix\"\n          }\n       ]\n     }\n   }]\n  }\n}', NULL, 1),
-	(11, 4, 'scIngressTemplate', 'sc_ingress_template', '{\n  \"apiVersion\": \"networking.k8s.io/v1\",\n  \"kind\": \"Ingress\",\n  \"metadata\": {\n   \"annotations\": {\n      \"traefik.ingress.kubernetes.io/router.entrypoints\": \"flowengine\",\n     \"traefik.ingress.kubernetes.io/router.middlewares\": \"flowengine-fl-stripurl@kubernetescrd\"\n    },\n    \"labels\": {\n     \"app\": \"fl-traefik\"\n   },\n    \"name\": \"${ingressName}\"\n  },\n  \"spec\": {\n   \"rules\": [{\n     \"http\": {\n       \"paths\": [{\n         \"backend\": {\n            \"service\": {\n              \"name\": \"${serviceName}\",\n             \"port\": {\n               \"number\": ${servicePort}\n              }\n           }\n         },\n          \"path\": \"/automl-engine/${engineKey}/${moduleId}/${scId}\"\n       }, {\n          \"backend\": {\n            \"service\": {\n              \"name\": \"${serviceName}\",\n             \"port\": {\n               \"number\": ${servicePort}\n              }\n           }\n         },\n          \"path\": \"/automl-engine/${scKey}/${moduleId}/${scId}\"\n       }]\n      }\n   }]\n  }\n}', NULL, 2),
-	(12, 4, 'traefikOnlineConfig', 'traefik_online_template', '{\n  \"apiVersion\": \"networking.k8s.io/v1\",\n \"kind\": \"Ingress\",\n  \"metadata\": {\n   \"annotations\": {\n      \"traefik.ingress.kubernetes.io/router.entrypoints\": \"fl-online\",\n      \"traefik.ingress.kubernetes.io/router.middlewares\": \"flowengine-fl-stripurl@kubernetescrd\"\n    },\n    \"labels\": {\n     \"app\": \"fl-traefik\"\n   },\n    \"name\": \"${ingressName}\"\n  },\n  \"spec\": {\n   \"rules\": [{\n     \"http\": {\n       \"paths\": [{\n         \"backend\": {\n            \"service\": {\n              \"name\": \"${serviceName}\",\n             \"port\": {\n               \"number\": ${servicePort}\n              }\n           }\n         },\n          \"path\": \"${gatewayUri}\"\n       }]\n      }\n   }]\n  }\n}', NULL, 3);
-```
-
 可以通过以下配置创建flowengine管理的ns，创建fl-ns.yaml,内容如下：
-```apiVersion: v1
+```
+apiVersion: v1
 kind: Namespace
 metadata:
   annotations:
@@ -177,6 +173,9 @@ metadata:
 > ```
 > 如果是minikube启动，请使用：
 > ` minikube service fl-traefik -n flowengine` 映射本地地址，登陆访问。
+
+> 注意，创建引擎的方案可使用云盘中方案，另外引擎绑定的数据库地址应在"设定"->"数据库配置信息"中:
+> "数据库默认开关"设置为false，数据库相关参数设置为实际配置。
 
 
 
