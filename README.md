@@ -1,7 +1,5 @@
 # 快速安装体验指南
->flowengine可以有两种部署方式：
->* 开源版本
->* 基于第四范式aios部署的商业版本（差异为：商业版本中含基于aios的企业级特性，数据接入及基于AIOS studio产品的DAG Job执行能力）
+
 ### 组成
 * fl-engine-manager
   * service:
@@ -37,8 +35,8 @@
 > (minikube:https://www.liujiajia.me/2022/5/28/manual-import-image-to-minikube)
 * mysql 5.7+
 #### 依赖镜像
-* flowengine（需手工下载，链接: https://pan.baidu.com/s/1SdzWCIO37UKfqOHhcfP4yQ 提取码: v6ee）
-* traefik（直接拉取）
+* flowengine
+* traefik
 
 ### 操作步骤
 > 确保将系统依赖的镜像上传到镜像仓库，并保证与K8s deploy yaml中镜像地址保持一致。
