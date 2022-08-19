@@ -142,7 +142,12 @@ flowengine启动配置一般在configmap中修改。如下：
   ....
  ```
 > 注意有些版本的mysql不兼容数据库名存在"-"，应先在数据库中通过
-``create database `engine-manager` ``手工创建
+``create database `engine-manager`;create database `solution-market` ``手工创建
+> 对于安装有helm工具的k8s集群，可以通过chart安装mysql：
+```
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm install my-mariadb bitnami/mariadb --version 11.1.1
+```
 
 可以通过以下配置创建flowengine管理的ns，创建fl-ns.yaml,内容如下：
 ```
