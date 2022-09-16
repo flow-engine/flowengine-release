@@ -68,17 +68,6 @@ items:
       namespace: flowengine
   - apiVersion: v1
     data:
-      hadoop.config.html: |-
-        <!DOCTYPE html><html><head>
-        <style>   body{color:#d4d4d4;background-color:#1e1e1e;line-height:1.3em;}#root dd span{color:#ce9178}#root dd span:first-child{color:#3a75af}    </style></head>
-        <body>    <dl id="root"></dl>
-        <script type="text/javascript">
-        var properties = '';
-         if(properties && properties.indexOf(':') > 0)
-         {  var list = properties.split('|');  var html = '';  for(var i=0;i<list.length;i++) {
-           let item = list[i]; if(item && item.indexOf(":") > 0) {let list = item.split(':');html += `<dd><span>${list[0]}
-           </span> : <span>${list[1]}</span></dd>`; }   }  document.getElementById('root').innerHTML = html;   }
-           </script></body> </html>
       nginx.conf: |-
         worker_processes 2;
         events {
@@ -109,7 +98,7 @@ items:
           client_max_body_size 10240m;
           server {
             location / {
-               alias /www/html/elf-automl-desktop/;
+               alias /www/html/elf-flowengine-desktop/;
 
               etag off;
               if ($request_filename ~* .*.(html|htm)$)
@@ -119,13 +108,9 @@ items:
               }
             }
 
-            location /upload {
-              include /etc/nginx/uwsgi_params;
-              uwsgi_pass 127.0.0.1:9000;
-            }
 
             location /engine {
-              alias /www/html/elf-automl-desktop/;
+              alias /www/html/elf-flowengine-desktop/;
 
               etag off;
               if ($request_filename ~* .*.(html|htm)$)
@@ -136,18 +121,7 @@ items:
             }
 
             location /sds {
-              alias /www/html/elf-sds-workbench/;
-
-              etag off;
-              if ($request_filename ~* .*.(html|htm)$)
-              {
-                  expires -1;
-                  add_header Last-Modified '';
-              }
-            }
-
-            location /flowengine-docs {
-              alias /www/html/flowengine-docs/;
+              alias /www/html/elf-fl-data/;
 
               etag off;
               if ($request_filename ~* .*.(html|htm)$)
@@ -160,7 +134,7 @@ items:
         }
     kind: ConfigMap
     metadata:
-      name: config-elf-flowengine-bundled
+      name: config-flowengine-ui
       namespace: flowengine
   - apiVersion: v1
     data:
@@ -347,25 +321,25 @@ items:
                 - name: MY_CPU_REQUEST
                   valueFrom:
                     resourceFieldRef:
-                      containerName: elf-flowengine-bundled
+                      containerName: flowengine-ui
                       divisor: "0"
                       resource: requests.cpu
                 - name: MY_CPU_LIMIT
                   valueFrom:
                     resourceFieldRef:
-                      containerName: elf-flowengine-bundled
+                      containerName: flowengine-ui
                       divisor: "0"
                       resource: limits.cpu
                 - name: MY_MEM_REQUEST
                   valueFrom:
                     resourceFieldRef:
-                      containerName: elf-flowengine-bundled
+                      containerName: flowengine-ui
                       divisor: "0"
                       resource: requests.memory
                 - name: MY_MEM_LIMIT
                   valueFrom:
                     resourceFieldRef:
-                      containerName: elf-flowengine-bundled
+                      containerName: flowengine-ui
                       divisor: "0"
                       resource: limits.memory
                 - name: TZ
@@ -380,7 +354,7 @@ items:
                 tcpSocket:
                   port: 80
                 timeoutSeconds: 10
-              name: elf-flowengine-bundled
+              name: flowengine-ui
               readinessProbe:
                 failureThreshold: 3
                 initialDelaySeconds: 5
@@ -397,14 +371,9 @@ items:
                   cpu: "0"
                   memory: "0"
               volumeMounts:
-                - mountPath: /app/prophet/logs
-                  name: log-volume
                 - mountPath: /etc/nginx/nginx.conf
                   name: config-nginx-conf
                   subPath: nginx.conf
-                - mountPath: /www/html/extra_static/t/hadoop.config.html
-                  name: config-nginx-conf
-                  subPath: hadoop.config.html
               workingDir: /opt/work
           dnsPolicy: ClusterFirst
           imagePullSecrets:
@@ -421,9 +390,7 @@ items:
                 items:
                   - key: nginx.conf
                     path: nginx.conf
-                  - key: hadoop.config.html
-                    path: hadoop.config.html
-                name: config-elf-flowengine-bundled
+                name: config-flowengine-ui
               name: config-nginx-conf
   - apiVersion: apps/v1
     kind: Deployment
@@ -802,7 +769,7 @@ items:
   - apiVersion: v1
     kind: Service
     metadata:
-      name: elf-flowengine-bundled
+      name: flowengine-ui
       namespace: flowengine
     spec:
       ports:
@@ -811,7 +778,7 @@ items:
           protocol: TCP
           targetPort: 80
       selector:
-        app: elf-flowengine-bundled
+        app: flowengine-ui
       sessionAffinity: None
       type: ClusterIP
   - apiVersion: v1
