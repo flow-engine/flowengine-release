@@ -134,7 +134,7 @@ items:
         }
     kind: ConfigMap
     metadata:
-      name: config-flowengine-ui
+      name: config-fl-ui
       namespace: flowengine
   - apiVersion: v1
     data:
@@ -286,14 +286,14 @@ items:
     kind: Deployment
     metadata:
       labels:
-        app: flowengine-ui
-      name: flowengine-ui
+        app: fl-ui
+      name: fl-ui
       namespace: flowengine
     spec:
       replicas: 1
       selector:
         matchLabels:
-          app: flowengine-ui
+          app: fl-ui
       strategy:
         rollingUpdate:
           maxSurge: 1
@@ -303,8 +303,8 @@ items:
         metadata:
           creationTimestamp: null
           labels:
-            app: flowengine-ui
-          name: flowengine-ui
+            app: fl-ui
+          name: fl-ui
         spec:
           containers:
             - env:
@@ -321,25 +321,25 @@ items:
                 - name: MY_CPU_REQUEST
                   valueFrom:
                     resourceFieldRef:
-                      containerName: flowengine-ui
+                      containerName: fl-ui
                       divisor: "0"
                       resource: requests.cpu
                 - name: MY_CPU_LIMIT
                   valueFrom:
                     resourceFieldRef:
-                      containerName: flowengine-ui
+                      containerName: fl-ui
                       divisor: "0"
                       resource: limits.cpu
                 - name: MY_MEM_REQUEST
                   valueFrom:
                     resourceFieldRef:
-                      containerName: flowengine-ui
+                      containerName: fl-ui
                       divisor: "0"
                       resource: requests.memory
                 - name: MY_MEM_LIMIT
                   valueFrom:
                     resourceFieldRef:
-                      containerName: flowengine-ui
+                      containerName: fl-ui
                       divisor: "0"
                       resource: limits.memory
                 - name: TZ
@@ -354,7 +354,7 @@ items:
                 tcpSocket:
                   port: 80
                 timeoutSeconds: 10
-              name: flowengine-ui
+              name: fl-ui
               readinessProbe:
                 failureThreshold: 3
                 initialDelaySeconds: 5
@@ -390,7 +390,7 @@ items:
                 items:
                   - key: nginx.conf
                     path: nginx.conf
-                name: config-flowengine-ui
+                name: config-fl-ui
               name: config-nginx-conf
   - apiVersion: apps/v1
     kind: Deployment
@@ -769,7 +769,7 @@ items:
   - apiVersion: v1
     kind: Service
     metadata:
-      name: flowengine-ui
+      name: fl-ui
       namespace: flowengine
     spec:
       ports:
@@ -778,7 +778,7 @@ items:
           protocol: TCP
           targetPort: 80
       selector:
-        app: flowengine-ui
+        app: fl-ui
       sessionAffinity: None
       type: ClusterIP
   - apiVersion: v1

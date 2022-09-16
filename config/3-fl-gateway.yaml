@@ -74,7 +74,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: elf-flowengine-bundled
+                name: fl-ui
                 port:
                   number: 80
           - path: /automl-manager
@@ -88,14 +88,14 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: elf-flowengine-bundled
+                name: fl-ui
                 port:
                   number: 80
           - path: /sds
             pathType: Prefix
             backend:
               service:
-                name: elf-flowengine-bundled
+                name: fl-ui
                 port:
                   number: 80
           - path: /template-market
