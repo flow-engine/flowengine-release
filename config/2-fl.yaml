@@ -286,14 +286,14 @@ items:
     kind: Deployment
     metadata:
       labels:
-        app: elf-flowengine-bundled
-      name: elf-flowengine-bundled
+        app: flowengine-ui
+      name: flowengine-ui
       namespace: flowengine
     spec:
       replicas: 1
       selector:
         matchLabels:
-          app: elf-flowengine-bundled
+          app: flowengine-ui
       strategy:
         rollingUpdate:
           maxSurge: 1
@@ -303,8 +303,8 @@ items:
         metadata:
           creationTimestamp: null
           labels:
-            app: elf-flowengine-bundled
-          name: elf-flowengine-bundled
+            app: flowengine-ui
+          name: flowengine-ui
         spec:
           containers:
             - env:
