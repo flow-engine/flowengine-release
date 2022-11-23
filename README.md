@@ -21,12 +21,8 @@
 ### 前置依赖
 #### 安装环境
 * kubernetes v1.16.8+
-* minikube v1.23.0+(个人学习使用)
-> 使用kind（https://kind.sigs.k8s.io/）或者k3s
-> 对于kind和minikube注意如果是外部导入镜像，应手工导入到集群内部
-> (kind:https://kind.sigs.k8s.io/docs/user/quick-start/#loading-an-image-into-your-cluster）
-> (minikube:https://www.liujiajia.me/2022/5/28/manual-import-image-to-minikube)
-> k3s安装参考
+* k3s(个人学习使用)
+> k3s安装参考(./k3s_install.md)
 * mysql 5.7+
 #### 依赖镜像
 * flowengine
