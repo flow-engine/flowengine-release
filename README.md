@@ -22,17 +22,11 @@
 #### 安装环境
 * kubernetes v1.16.8+
 * minikube v1.23.0+(个人学习使用)
-> 如何安装：https://minikube.sigs.k8s.io/docs/start/，
-> 由于，minikube也是作为一个容器在docker中运行，因此，需要先调整docker资源限制。
->```
-> curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
-> sudo install minikube-darwin-amd64 /usr/local/bin/minikube
-> minikube start --image-mirror-country='cn' --cpus=4 --memory=8192m
->```
-> 也可使用kind（https://kind.sigs.k8s.io/）或者k3s
+> 使用kind（https://kind.sigs.k8s.io/）或者k3s
 > 对于kind和minikube注意如果是外部导入镜像，应手工导入到集群内部
 > (kind:https://kind.sigs.k8s.io/docs/user/quick-start/#loading-an-image-into-your-cluster）
 > (minikube:https://www.liujiajia.me/2022/5/28/manual-import-image-to-minikube)
+> k3s安装参考
 * mysql 5.7+
 #### 依赖镜像
 * flowengine
