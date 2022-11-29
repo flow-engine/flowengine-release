@@ -1,4 +1,8 @@
 ## k3s部署
+
+依赖操作系统：
+centos 7
+
 1）选择合适版本：
 [https://update.k3s.io/v1-release/channels](https://update.k3s.io/v1-release/channels)
 2）利用官方命令安装
