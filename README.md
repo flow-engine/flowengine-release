@@ -153,7 +153,7 @@ metadata:
 执行`kubectl apply -f fl-ns.yaml`即可创建。
 实际上，你也可以通过在已有ns里增加上述annotation和labels来将其交给flowengine托管。
 
-至此，flowengine已安装完成，用户名密码admin/admin，enjoy it！
+至此，flowengine已安装完成，管理后台地址：http://{entry_ip}:31101，用户名密码admin/admin，enjoy it！
 > flowengine默认地址为
 > ```
 > |------------|------------|-----------------|---------------------------|
