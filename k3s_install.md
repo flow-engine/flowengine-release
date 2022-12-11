@@ -26,25 +26,37 @@
 
   3) 硬盘如图选择，硬盘大小设置为64G，后期可以通过新建硬盘，挂载。
   
-![image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656309666945-9ec3800b-16d8-40a0-b7df-0e8d1bc807ca.png#averageHue=%23f5f4f3&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=403&id=u4c235b1d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=605&originWidth=578&originalType=binary&ratio=1&rotation=0&showTitle=false&size=43299&status=done&style=none&taskId=u6662213f-4489-4320-9f47-fec68c2944e&title=&width=385.3333333333333)![image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656309758813-0dc12e45-2a9d-4273-a3c6-c217b1452690.png#averageHue=%23fafaf9&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=454&id=u7f249889&margin=%5Bobject%20Object%5D&name=image.png&originHeight=681&originWidth=612&originalType=binary&ratio=1&rotation=0&showTitle=false&size=31943&status=done&style=none&taskId=u308c212b-4b2b-4093-a7ff-c7e9956ae27&title=&width=408)![image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656309803184-802755ad-1342-4d1c-9197-fbedcfc26218.png#averageHue=%23f8f7f7&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=457&id=uf892b553&margin=%5Bobject%20Object%5D&name=image.png&originHeight=686&originWidth=617&originalType=binary&ratio=1&rotation=0&showTitle=false&size=42047&status=done&style=none&taskId=u2c407c44-a10a-4eed-be74-3503c620e4a&title=&width=411.3333333333333)
+![image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656309666945-9ec3800b-16d8-40a0-b7df-0e8d1bc807ca.png#averageHue=%23f5f4f3&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=403&id=u4c235b1d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=605&originWidth=578&originalType=binary&ratio=1&rotation=0&showTitle=false&size=43299&status=done&style=none&taskId=u6662213f-4489-4320-9f47-fec68c2944e&title=&width=385.3333333333333)!
+
+[image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656309758813-0dc12e45-2a9d-4273-a3c6-c217b1452690.png#averageHue=%23fafaf9&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=454&id=u7f249889&margin=%5Bobject%20Object%5D&name=image.png&originHeight=681&originWidth=612&originalType=binary&ratio=1&rotation=0&showTitle=false&size=31943&status=done&style=none&taskId=u308c212b-4b2b-4093-a7ff-c7e9956ae27&title=&width=408)![image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656309803184-802755ad-1342-4d1c-9197-fbedcfc26218.png#averageHue=%23f8f7f7&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=457&id=uf892b553&margin=%5Bobject%20Object%5D&name=image.png&originHeight=686&originWidth=617&originalType=binary&ratio=1&rotation=0&showTitle=false&size=42047&status=done&style=none&taskId=u2c407c44-a10a-4eed-be74-3503c620e4a&title=&width=411.3333333333333)
+
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656309890604-6f7021de-a6ac-42db-9e86-0f0e5511c956.png#averageHue=%23f8f8f7&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=455&id=ud6660756&margin=%5Bobject%20Object%5D&name=image.png&originHeight=683&originWidth=628&originalType=binary&ratio=1&rotation=0&showTitle=false&size=33560&status=done&style=none&taskId=ua2382938-fd11-440b-a67f-510c27431b4&title=&width=418.6666666666667)
 
 点击“创建”。
 
-  4）配置启动盘，选择设置，存储，选择盘片，添加下载好的os镜像文件，保存。
+4）配置启动盘，选择设置，存储，选择盘片，添加下载好的os镜像文件，保存。
+
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656310089069-b20c8490-8e83-470d-ba03-7670fc803662.png#averageHue=%23f4f3f3&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=581&id=uec674b6d&margin=%5Bobject%20Object%5D&name=image.png&originHeight=872&originWidth=1196&originalType=binary&ratio=1&rotation=0&showTitle=false&size=67990&status=done&style=none&taskId=u1f46f7d6-43f7-46a6-ab2a-156fffce039&title=&width=797.3333333333334)
 选择NAT网络：
+
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656312520684-9b324158-b60f-4e6c-b357-406db7cba01b.png#averageHue=%23f7f6f6&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=594&id=ub63188ef&margin=%5Bobject%20Object%5D&name=image.png&originHeight=891&originWidth=1200&originalType=binary&ratio=1&rotation=0&showTitle=false&size=58928&status=done&style=none&taskId=u31248c98-ac7f-41d5-ad4d-8ff454ed2a6&title=&width=800)
-  5）选择刚才创建的虚拟机，点击“启动”
+
+5）选择刚才创建的虚拟机，点击“启动”
+
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656310593568-4129fbd7-0053-44df-adff-11ff6ed9c4c0.png#averageHue=%23e7e4e2&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=397&id=uee8b3a54&margin=%5Bobject%20Object%5D&name=image.png&originHeight=595&originWidth=1168&originalType=binary&ratio=1&rotation=0&showTitle=false&size=112663&status=done&style=none&taskId=u499a44ae-9c78-4622-9360-27c53809370&title=&width=778.6666666666666)
+
 默认选择"Test this media & install CentOS 7",回车。
+
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656310647389-ad783998-5fb4-4aba-b20c-0954abbc37d5.png#averageHue=%23313131&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=405&id=ub5814d80&margin=%5Bobject%20Object%5D&name=image.png&originHeight=608&originWidth=644&originalType=binary&ratio=1&rotation=0&showTitle=false&size=27657&status=done&style=none&taskId=ued1d0ae0-a332-4ea3-b789-266e3cbb83a&title=&width=429.3333333333333)
+
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656310891990-7efcbf8d-18fd-4685-a724-ebb15be0613d.png#averageHue=%23e7e7e5&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=475&id=u4433ca8a&margin=%5Bobject%20Object%5D&name=image.png&originHeight=713&originWidth=800&originalType=binary&ratio=1&rotation=0&showTitle=false&size=137921&status=done&style=none&taskId=uc84e162f-cb64-4798-8b88-a495a68d860&title=&width=533.3333333333334)
- 下一步，完成各项系统设置，选择时区：
+
+下一步，完成各项系统设置，选择时区：
 
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656311009213-8faaa209-bd05-49ed-aee7-a622e3c84c6d.png#averageHue=%23e8e3db&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=480&id=u99a94ea4&margin=%5Bobject%20Object%5D&name=image.png&originHeight=720&originWidth=799&originalType=binary&ratio=1&rotation=0&showTitle=false&size=135655&status=done&style=none&taskId=u8fe153da-284a-49f6-9135-a2b3fc896cc&title=&width=532.6666666666666)
 
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656310963481-29371d0d-e6b5-4e0b-929b-d700ddcb2ab9.png#averageHue=%23a5d480&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=478&id=u6e5f9344&margin=%5Bobject%20Object%5D&name=image.png&originHeight=717&originWidth=801&originalType=binary&ratio=1&rotation=0&showTitle=false&size=198014&status=done&style=none&taskId=u89cc24d2-e3eb-4555-aca7-1066cc6705a&title=&width=534)
+
 system中installation destiontion进入默认选择。
 
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656311125609-09fdbe23-a0f8-48bd-aef0-1152d28b8f77.png#averageHue=%23e7e7e5&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=477&id=u7d4fd5fa&margin=%5Bobject%20Object%5D&name=image.png&originHeight=716&originWidth=798&originalType=binary&ratio=1&rotation=0&showTitle=false&size=139782&status=done&style=none&taskId=ub4a48332-5339-4be8-928b-c4923884c4f&title=&width=532)
@@ -80,6 +92,7 @@ ONBOOT=yes
 service network restart
 ```
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656315312730-08d044b0-04b4-4a93-abb9-243f09348ae3.png#averageHue=%23131313&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=177&id=u723c0b5b&margin=%5Bobject%20Object%5D&name=image.png&originHeight=265&originWidth=349&originalType=binary&ratio=1&rotation=0&showTitle=false&size=6580&status=done&style=none&taskId=u12129f07-80fe-401c-b19f-dc9aaae8c9d&title=&width=232.66666666666666)
+
 安装软件并修改yum源。
 ```
 yum -y install net-tools wget ntpdate git gcc
@@ -116,6 +129,7 @@ The key's randomart image is:
 ```
 ## 4.配置ssh远程登录
 通过ifconfig获得ip
+
 ![image.png](https://cdn.nlark.com/yuque/0/2022/png/28211224/1656315611850-11489855-8d8f-424f-9f22-a42e88501090.png#averageHue=%23121212&clientId=u6ad16729-0251-4&crop=0&crop=0&crop=1&crop=1&from=paste&height=207&id=ub70f7d2e&margin=%5Bobject%20Object%5D&name=image.png&originHeight=310&originWidth=713&originalType=binary&ratio=1&rotation=0&showTitle=false&size=13448&status=done&style=none&taskId=udd9e2679-38b8-4833-a80c-7e110cc8cc3&title=&width=475.3333333333333)
 
 进入virtualbox管理->全局设定->网络
