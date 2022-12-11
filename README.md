@@ -20,7 +20,7 @@
   * middleware
 ### 前置依赖
 #### 安装环境
-* kubernetes v1.16.8+
+* kubernetes 最低v1.16.8+,推荐v1.19.16+
 * k3s(个人学习使用)
 > [k3s安装参考](./k3s_install.md)
 * mysql 5.7+
