@@ -1,0 +1,213 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+  labels:
+    app: fl-traefik
+  name: fl-traefik
+  namespace: flowengine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: fl-traefik
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: fl-traefik
+    spec:
+      containers:
+        - args:
+            - --api.insecure
+            - --accesslog
+            - --log.level=DEBUG
+            - --entrypoints.fl-online.Address=:9000
+            - --entrypoints.flowengine.Address=:9001
+            - --providers.kubernetesingress.labelselector=app=fl-traefik
+            - --entrypoints.traefik.Address=:9002
+            - --providers.kubernetescrd
+            - --providers.kubernetesingress
+          image: traefik:v2.5
+          imagePullPolicy: IfNotPresent
+          name: traefik
+          ports:
+            - containerPort: 9000
+              name: fl-online
+              protocol: TCP
+            - containerPort: 9002
+              name: traefik
+              protocol: TCP
+            - containerPort: 9001
+              name: flowengine
+              protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: fl-traefik-ingress-controller
+      serviceAccountName: fl-traefik-ingress-controller
+      terminationGracePeriodSeconds: 30
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: flowengine
+    traefik.ingress.kubernetes.io/router.middlewares: flowengine-fl-stripurl@kubernetescrd
+  labels:
+    app: fl-traefik
+  name: flowengine-gateway
+  namespace: flowengine
+spec:
+  rules:
+    - http:
+        paths:
+          - backend:
+              serviceName: fl-ui
+              servicePort: 80
+            path: /
+          - backend:
+              serviceName: fl-engine-manager
+              servicePort: 80
+            path: /automl-manager
+          - backend:
+              serviceName: fl-ui
+              servicePort: 80
+            path: /engine
+          - backend:
+              serviceName: fl-ui
+              servicePort: 80
+            path: /sds
+          - backend:
+              serviceName: fl-hub
+              servicePort: 80
+            path: /template-market
+          - backend:
+              serviceName: fl-data
+              servicePort: 80
+            path: /sds-workbench
+          - backend:
+              serviceName: fl-engine-manager
+              servicePort: 80
+            path: /keystone
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: fl-traefik
+  namespace: flowengine
+spec:
+  ports:
+    - name: flowengine
+      nodePort: 31101
+      port: 9001
+      protocol: TCP
+      targetPort: 9001
+    - name: traefik
+      nodePort: 31102
+      port: 9002
+      protocol: TCP
+      targetPort: 9002
+    - name: fl-online
+      nodePort: 31100
+      port: 80
+      protocol: TCP
+      targetPort: 9000
+  selector:
+    app: fl-traefik
+  sessionAffinity: None
+  type: NodePort
+---
+apiVersion: v1
+kind: List
+items:
+  - apiVersion: traefik.containo.us/v1alpha1
+    kind: Middleware
+    metadata:
+      name: fl-stripurl
+      namespace: flowengine
+    spec:
+      stripPrefix:
+        forceSlash: false
+        prefixes:
+          - /template-market
+          - /sds-workbench
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: flowengine
+  name: fl-traefik-ingress-controller
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: fl-traefik-ingress-controller
+
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - services
+      - endpoints
+      - secrets
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - extensions
+      - networking.k8s.io
+    resources:
+      - ingresses
+      - ingressclasses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - extensions
+    resources:
+      - ingresses/status
+    verbs:
+      - update
+  - apiGroups:
+      - traefik.containo.us
+    resources:
+      - middlewares
+      - middlewaretcps
+      - ingressroutes
+      - traefikservices
+      - ingressroutetcps
+      - ingressrouteudps
+      - tlsoptions
+      - tlsstores
+      - serverstransports
+    verbs:
+      - get
+      - list
+      - watch
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: fl-traefik-ingress-controller
+
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: fl-traefik-ingress-controller
+subjects:
+  - kind: ServiceAccount
+    name: fl-traefik-ingress-controller
+    namespace: flowengine

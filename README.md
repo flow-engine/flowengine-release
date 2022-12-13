@@ -20,19 +20,9 @@
   * middleware
 ### 前置依赖
 #### 安装环境
-* kubernetes v1.16.8+
-* minikube v1.23.0+(个人学习使用)
-> 如何安装：https://minikube.sigs.k8s.io/docs/start/，
-> 由于，minikube也是作为一个容器在docker中运行，因此，需要先调整docker资源限制。
->```
-> curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-darwin-amd64
-> sudo install minikube-darwin-amd64 /usr/local/bin/minikube
-> minikube start --image-mirror-country='cn' --cpus=4 --memory=8192m
->```
-> 也可使用kind（https://kind.sigs.k8s.io/）或者k3s
-> 对于kind和minikube注意如果是外部导入镜像，应手工导入到集群内部
-> (kind:https://kind.sigs.k8s.io/docs/user/quick-start/#loading-an-image-into-your-cluster）
-> (minikube:https://www.liujiajia.me/2022/5/28/manual-import-image-to-minikube)
+* kubernetes 最低v1.16.8+,推荐v1.19.16+
+* k3s(个人学习使用)
+> [k3s安装参考](./k3s_install.md)
 * mysql 5.7+
 #### 依赖镜像
 * flowengine
@@ -40,6 +30,7 @@
 
 ### 操作步骤
 > 确保将系统依赖的镜像上传到镜像仓库，并保证与K8s deploy yaml中镜像地址保持一致。
+> 将本repo下载或者clone到本地，进入该工作目录
 
 以下操作在kubernetes命令行或者能够执行k8s命令的窗口执行。
 
@@ -90,7 +81,7 @@ service/fl-hub created
    ```
 
 安装flowengine网关
-执行`3-fl-gateway.yaml`
+执行`3-fl-gateway.yaml`，老版本k8s（<1.16）执行`3-fl-gateway-k8s-below-1.16.yaml`
 ```
 (base) ➜  flowengine-release git:(master) ✗ kubectl apply -f config/3-fl-gateway.yaml
 deployment.apps/fl-traefik created
@@ -163,7 +154,7 @@ metadata:
 执行`kubectl apply -f fl-ns.yaml`即可创建。
 实际上，你也可以通过在已有ns里增加上述annotation和labels来将其交给flowengine托管。
 
-至此，flowengine已安装完成，用户名密码admin/admin，enjoy it！
+至此，flowengine已安装完成，管理后台地址：http://{entry_ip}:31101，用户名密码admin/admin，enjoy it！
 > flowengine默认地址为
 > ```
 > |------------|------------|-----------------|---------------------------|
@@ -174,8 +165,6 @@ metadata:
 > |            |            | fl-online/80    | http://192.168.49.2:31100 |
 > |------------|------------|-----------------|---------------------------|
 > ```
-> 如果是minikube启动，请使用：
-> ` minikube service fl-traefik -n flowengine` 映射本地地址，登陆访问。
 
 > 注意，创建引擎的方案可使用该repo中examples目录的方案，另外引擎绑定的数据库地址应在"设定"->"数据库配置信息"中:
 > "数据库默认开关"设置为false，数据库相关参数设置为实际配置。
