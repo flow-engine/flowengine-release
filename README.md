@@ -134,10 +134,18 @@ flowengine启动配置一般在configmap中修改。如下：
  ```
 > 注意有些版本的mysql不兼容数据库名存在"-"，应先在数据库中通过
 ``create database `engine-manager`;create database `solution-market` ``手工创建
-> 对于安装有helm工具的k8s集群，可以通过chart安装mysql：
+> 对于安装有helm工具的k8s集群，可以通过chart安装mysql，mysql默认为my-mariadb.flowengine：
 ```
 helm repo add bitnami https://charts.bitnami.com/bitnami
-helm install my-mariadb bitnami/mariadb --version 11.1.1
+helm install --namespace flowengine my-mariadb bitnami/mariadb --version 11.1.1
+#获得密码
+kubectl get secret --namespace flowengine my-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d
+# 1. Run a pod that you can use as a client:
+kubectl run my-mariadb-client --rm --tty -i --restart='Never' --image  docker.io/bitnami/mariadb:10.6.8-debian-11-r9 --namespace flowengine --command -- bash
+#2. To connect to primary service (read/write):
+mysql -h my-mariadb.flowengine.svc.cluster.local -uroot -p my_database
+#3. 修改密码
+ SET PASSWORD FOR 'root'@'%' = PASSWORD('123456');
 ```
 
 可以通过以下配置创建flowengine管理的ns，创建fl-ns.yaml,内容如下：
