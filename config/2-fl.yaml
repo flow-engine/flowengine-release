@@ -193,14 +193,13 @@ items:
         fl.basicAuth.account={'1':'YWRtaW46YWRtaW4='}
         fl.skipAuthUris=/keystone/v1/sessions,/keystone/v1/token
 
-        #当运行模式为aios时生效
+        #对接aios dag
+        aios.url=http://172.27.128.115:40121/
         aios.namespace=prophet
-        aios.pas.server.host=172.27.128.146
-        aios.pas.server.port=40121
-        aios.pdms.url=http://172.27.128.146:40121
+        aios.pdms.url=${aios.url}
         aios.common.accesskey=${ACCESS_KEY:e5f1fc70-7d1d-4f60-9bd6-fd949078adad}
-        aios.config-center.url=http://172.27.128.146:40121/config-center
-        aios.keystone.url=http://172.27.128.146:40121
+        aios.config-center.url=http://${aios.url}/config-center
+        aios.keystone.url=${aios.url}
         aios.keystone.version=v1
     kind: ConfigMap
     metadata:
