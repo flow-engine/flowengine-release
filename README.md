@@ -146,6 +146,15 @@ kubectl run my-mariadb-client --rm --tty -i --restart='Never' --image  docker.io
 mysql -h my-mariadb.flowengine.svc.cluster.local -uroot -p my_database
 #3. 修改密码
  SET PASSWORD FOR 'root'@'%' = PASSWORD('123456');
+ 参考此文档 https://mariadb.org/mariadb-k8s-create-a-secret-and-use-it-in-mariadb-deployment/
+  创建secret: 
+  kubectl create secret generic mariadb-secret  --from-file=mariadb-root-password=./password.txt -n flowengine
+  修改statefuset配置，绑定
+ 
+#4. 创建库
+```
+ create database `solution-market`;
+ create database `engine-manager`;
 ```
 
 可以通过以下配置创建flowengine管理的ns，创建fl-ns.yaml,内容如下：
@@ -154,7 +163,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   annotations:
-    fl-managed-ns-config: '{"onAios":false,"name":"fl-test","aiosAccessKey":""}'
+    fl-managed-ns-config: '{"onAios":false,"name":"fl-test","aiosWorkspaceId":"","aiosAccessKey":""}'
   labels:
     fl-managed-ns: "true"
   name: fl-test
