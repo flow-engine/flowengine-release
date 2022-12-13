@@ -291,9 +291,13 @@ edgenode1   Ready    master   3m34s   v1.19.16+k3s1
 [https://rancher.com/docs/k3s/latest/en/installation/airgap/](https://rancher.com/docs/k3s/latest/en/installation/airgap/)
 
   1. 在[releases](https://github.com/rancher/k3s/releases)下载k3s及k3s-airgap-images-amd64.tar。
-  2. 将k3s文件移动到**/usr/local/bin目录下，并chmod +x /usr/local/bin/k3s**
-  **3.将**k3s-airgap-images-amd64.tar移动到**/var/lib/rancher/k3s/agent/images/**
-  **4.**wget [https://get.k3s.io](https://get.k3s.io) > install.sh,chmod +x install.sh
+  2. 将k3s文件移动到**/usr/local/bin目录下，并chmod +x /usr/local/bin/k3s
+  3. 将k3s-airgap-images-amd64.tar移动到**/var/lib/rancher/k3s/agent/images/**
+  4. 下载安装脚本
+     ```
+     wget https://get.k3s.io -O install.sh,
+     chmod +x install.sh
+     ```
   5. 执行INSTALL_K3S_SKIP_DOWNLOAD=true INSTALL_K3S_EXEC="--docker --disable traefik"  ./install.sh
 
 设置kubeconfig
