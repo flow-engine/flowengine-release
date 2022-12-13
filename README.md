@@ -146,6 +146,9 @@ kubectl run my-mariadb-client --rm --tty -i --restart='Never' --image  docker.io
 mysql -h my-mariadb.flowengine.svc.cluster.local -uroot -p my_database
 #3. 修改密码
  SET PASSWORD FOR 'root'@'%' = PASSWORD('123456');
+#4. 创建库
+ create database `solution-market`;
+ create database `engine-manager`;
 ```
 
 可以通过以下配置创建flowengine管理的ns，创建fl-ns.yaml,内容如下：
