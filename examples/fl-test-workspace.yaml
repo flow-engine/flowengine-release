@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Namespace
 metadata:
   annotations:
-    fl-managed-ns-config: '{"onAios":false,"name":"fl-test","aiosAccessKey":""}'
+    fl-managed-ns-config: '{"onAios":false,"name":"fl-test","aiosAccessKey":"","aiosWorkspaceId":"9",}'
   labels:
     fl-managed-ns: "true"
   name: fl-test
