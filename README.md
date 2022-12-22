@@ -143,21 +143,20 @@ kubectl get secret --namespace flowengine my-mariadb -o jsonpath="{.data.mariadb
 # 1. Run a pod that you can use as a client:
 kubectl run my-mariadb-client --rm --tty -i --restart='Never' --image  docker.io/bitnami/mariadb:10.6.8-debian-11-r9 --namespace flowengine --command -- bash
 #2. To connect to primary service (read/write):
-mysql -h my-mariadb.flowengine.svc.cluster.local -uroot -p my_database
+ mysql -h my-mariadb.flowengine.svc.cluster.local -uroot -p my_database
 #3. 修改密码
  SET PASSWORD FOR 'root'@'%' = PASSWORD('123456');
  参考此文档 https://mariadb.org/mariadb-k8s-create-a-secret-and-use-it-in-mariadb-deployment/
-  创建secret: 
-  kubectl create secret generic mariadb-secret  --from-file=mariadb-root-password=./password.txt -n flowengine
-  修改statefuset配置，绑定
- 
+ 创建secret: 
+ kubectl create secret generic mariadb-secret  --from-file=mariadb-root-password=./password.txt -n flowengine
+ 修改statefuset配置，绑定
 #4. 创建库
-```
  create database `solution-market`;
  create database `engine-manager`;
 ```
 
 可以通过以下配置创建flowengine管理的ns，创建fl-ns.yaml,内容如下：
+
 ```
 apiVersion: v1
 kind: Namespace
@@ -168,6 +167,7 @@ metadata:
     fl-managed-ns: "true"
   name: fl-test
 ```
+
 执行`kubectl apply -f fl-ns.yaml`即可创建。
 实际上，你也可以通过在已有ns里增加上述annotation和labels来将其交给flowengine托管。
 
