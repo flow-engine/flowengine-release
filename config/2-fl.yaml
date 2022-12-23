@@ -200,7 +200,6 @@ items:
         aios.common.accesskey=${ACCESS_KEY:e5f1fc70-7d1d-4f60-9bd6-fd949078adad}
         aios.config-center.url=http://${aios.url}/config-center
         aios.keystone.url=${aios.url}
-        aios.keystone.version=v1
     kind: ConfigMap
     metadata:
       name: config-fl-engine-manager
