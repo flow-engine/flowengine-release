@@ -25,8 +25,13 @@
 > [k3s安装参考](./k3s_install.md)
 * mysql 5.7+
 #### 依赖镜像
-* flowengine
-* traefik
+* flowengine/flowengine-ui:0.0.2.2
+* flowengine/engine-manager:0.0.2.2
+* flowengine/data:0.0.2
+* flowengine/hub:0.0.2
+* flowengine/engine-kernel:0.0.2.2
+* flowengine/func-pipeline-runtime:0.0.2
+* traefik:v2.5
 
 ### 操作步骤
 > 确保将系统依赖的镜像上传到镜像仓库，并保证与K8s deploy yaml中镜像地址保持一致。
