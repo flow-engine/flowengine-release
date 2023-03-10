@@ -130,15 +130,13 @@ flowengine启动配置一般在configmap中修改。如下：
 
   db.host=localhost #修改为你的mysql地址
   db.port=3306 #修改为你的mysql地址
-  db.name=engine-manager #保持不变
+  db.name=fl_engine_manager #保持不变
   db.username=root #修改为你的mysql地址
   db.password= #修改为你的mysql地址
 
   flyway.enabled=true   #系统会自动建库建表
   ....
  ```
-> 注意有些版本的mysql不兼容数据库名存在"-"，应先在数据库中通过
-``create database `engine-manager`;create database `solution-market` ``手工创建
 > 对于安装有helm工具的k8s集群，可以通过chart安装mysql，mysql默认为my-mariadb.flowengine：
 ```
 helm repo add bitnami https://charts.bitnami.com/bitnami
@@ -155,9 +153,6 @@ kubectl run my-mariadb-client --rm --tty -i --restart='Never' --image  docker.io
  创建secret: 
  kubectl create secret generic mariadb-secret  --from-file=mariadb-root-password=./password.txt -n flowengine
  修改statefuset配置，绑定
-#4. 创建库
- create database `solution-market`;
- create database `engine-manager`;
 ```
 
 可以通过以下配置创建flowengine管理的ns，创建fl-ns.yaml,内容如下：
