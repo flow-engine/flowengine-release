@@ -44,7 +44,7 @@ items:
         app:
             db:
                 host: 'my-mariadb.flowengine'
-                name: 'sds'
+                name: 'fl_data'
                 password: '123456'
                 port: '3306'
                 username: 'root'
@@ -157,7 +157,7 @@ items:
 
         db.host=my-mariadb.flowengine
         db.port=3306
-        db.name=engine-manager
+        db.name=fl_engine_manager
         db.username=root
         db.password=123456
         db.jdbc_mysql_params=${JDBC_MYSQL_PARAMS:connectionCollation=utf8mb4_unicode_ci&useSSL=false&sessionVariables=time_zone%3d'%2B0%3A00'}
@@ -221,7 +221,7 @@ items:
         #数据库相关
         db.host=my-mariadb.flowengine
         db.port=3306
-        db.name=solution-market
+        db.name=fl_hub
         db.username=root
         db.password=123456
         spring.datasource.url=jdbc:mysql://${db.host}:${db.port}/${db.name}?useUnicode=yes&characterEncoding=UTF-8&createDatabaseIfNotExist=true&useLegacyDatetimeCode=false
