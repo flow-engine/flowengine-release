@@ -86,7 +86,7 @@ service/fl-hub created
    ```
 
 安装flowengine网关
-执行`3-fl-gateway.yaml`，老版本k8s（<1.16）执行`3-fl-gateway-k8s-below-1.16.yaml`
+执行`3-fl-gateway.yaml`，老版本k8s（先知环境）执行`3-fl-gateway-k8s-below-1.16.yaml`
 ```
 (base) ➜  flowengine-release git:(master) ✗ kubectl apply -f config/3-fl-gateway.yaml
 deployment.apps/fl-traefik created
