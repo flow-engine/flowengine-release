@@ -119,17 +119,6 @@ items:
                   add_header Last-Modified '';
               }
             }
-
-            location /sds {
-              alias /www/html/elf-fl-data/;
-
-              etag off;
-              if ($request_filename ~* .*.(html|htm)$)
-              {
-                  expires -1;
-                  add_header Last-Modified '';
-              }
-            }
           }
         }
     kind: ConfigMap
@@ -342,7 +331,7 @@ items:
                       resource: limits.memory
                 - name: TZ
                   value: Asia/Shanghai
-              image: flowengine/flowengine-ui:0.0.2.2
+              image: flowengine/flowengine-ui:0.0.3.2
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3
@@ -458,7 +447,7 @@ items:
                   value: useSSL=false&useUnicode=yes&characterEncoding=UTF-8&createDatabaseIfNotExist=true&serverTimezone=GMT%2B8
                 - name: RUNNINGENV
                   value: aios
-              image: flowengine/engine-manager:0.0.2.2
+              image: flowengine/engine-manager:0.0.3.2-beta
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3
@@ -690,7 +679,7 @@ items:
                   value: connectionCollation=utf8mb4_unicode_ci&useSSL=false&sessionVariables=time_zone%3d'%2B0%3A00'
                 - name: TZ
                   value: Asia/Shanghai
-              image: flowengine/hub:0.0.2
+              image: flowengine/hub:0.0.3.2-beta
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3

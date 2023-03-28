@@ -25,11 +25,11 @@
 > [k3s安装参考](./k3s_install.md)
 * mysql 5.7+
 #### 依赖镜像
-* flowengine/flowengine-ui:0.0.2.2
-* flowengine/engine-manager:0.0.2.2
+* flowengine/flowengine-ui:0.0.3.2
+* flowengine/engine-manager:0.0.3.2-beta
 * flowengine/data:0.0.2
-* flowengine/hub:0.0.2
-* flowengine/engine-kernel:0.0.2.2
+* flowengine/hub:0.0.3.2-beta
+* flowengine/engine-kernel:0.0.3.2-beta
 * flowengine/func-pipeline-runtime:0.0.2
 * traefik:v2.5
 
