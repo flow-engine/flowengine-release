@@ -29,7 +29,7 @@
 
 > [k3s安装参考](./k3s_install.md)
 
-* mysql 5.7+
+* mysql/mariadb 5.7+
 
 #### 依赖镜像
 
@@ -171,7 +171,13 @@ kubectl run my-mariadb-client --rm --tty -i --restart='Never' --image  docker.io
  参考此文档 https://mariadb.org/mariadb-k8s-create-a-secret-and-use-it-in-mariadb-deployment/
  创建secret: 
  kubectl create secret generic mariadb-secret  --from-file=mariadb-root-password=./password.txt -n flowengine
- 修改statefuset配置，绑定
+ 修改statefuset配置kubectl edit statefulset my-mariadb -n flowengine，绑定
+ - name: MARIADB_ROOT_PASSWORD
+   valueFrom:
+     secretKeyRef:
+       key: mariadb-root-password
+       name: mariadb-secret
+ 如果未操作此步，会出现mariadb循环重启的现象。
 ```
 
 可以通过以下配置创建flowengine管理的ns，创建fl-ns.yaml,内容如下：
