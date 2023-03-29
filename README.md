@@ -185,7 +185,15 @@ metadata:
 
 > 注意，创建引擎的方案可使用该repo中examples目录的方案，另外引擎绑定的数据库地址应在"设定"->"数据库配置信息"中:
 > "数据库默认开关"设置为false，数据库相关参数设置为实际配置。
-
+> 对于低版本k8s，还需要执行如下sql，保证兼容ingress
+> ```
+> delete from automl_manager_dict_value where dict_id = '4';
+> INSERT INTO `automl_manager_dict_value` (`id`, `dict_id`, `value_name`, `value_code`, `value`, `remark`, `value_order`)
+> VALUES
+>    (10, 4, 'enginekernel ingress template', 'engine_kernel_ingress_template', '{\n \"apiVersion\": \"extensions/v1beta1\",\n  \"kind\": \"Ingress\",\n  \"metadata\": {\n   \"annotations\": {\n      \"traefik.ingress.kubernetes.io/router.middlewares\": \"flowengine-fl-stripurl@kubernetescrd\",\n     \"traefik.ingress.kubernetes.io/router.entrypoints\": \"flowengine\"\n    },\n    \"labels\": {\n     \"app\": \"fl-traefik\"\n   },\n    \"name\": \"${ingressName}\"\n  },\n  \"spec\": {\n   \"rules\": [{\n     \"http\": {\n       \"paths\": [{\n           \"backend\": {\n              \"serviceName\": \"${serviceName}\",\n              \"servicePort\": ${servicePort}\n           },\n            \"path\": \"/automl-engine/${relModuleId}/${engineKey}/\"\n          },\n          {\n           \"backend\": {\n              \"serviceName\": \"${serviceName}\",\n              \"servicePort\": ${servicePort}\n             },\n            \"path\": \"/automl-engine/${moduleId}/\"\n          }\n       ]\n     }\n   }]\n  }\n}', NULL, 1),
+>    (11, 4, 'scIngressTemplate', 'sc_ingress_template', '{\n  \"apiVersion\": \"extensions/v1beta1\",\n  \"kind\": \"Ingress\",\n  \"metadata\": {\n   \"annotations\": {\n      \"traefik.ingress.kubernetes.io/router.entrypoints\": \"flowengine\",\n     \"traefik.ingress.kubernetes.io/router.middlewares\": \"flowengine-fl-stripurl@kubernetescrd\"\n    },\n    \"labels\": {\n     \"app\": \"fl-traefik\"\n   },\n    \"name\": \"${ingressName}\"\n  },\n  \"spec\": {\n   \"rules\": [{\n     \"http\": {\n       \"paths\": [{\n         \"backend\": {\n            \"serviceName\": \"${serviceName}\",\n            \"servicePort\": ${servicePort}\n         },\n          \"path\": \"/automl-engine/${engineKey}/${moduleId}/${scId}\"\n       }, {\n          \"backend\": {\n            \"serviceName\": \"${serviceName}\",\n            \"servicePort\": ${servicePort}\n            },\n          \"path\": \"/automl-engine/${scKey}/${moduleId}/${scId}\"\n       }]\n      }\n   }]\n  }\n}', NULL, 2),
+>    (12, 4, 'traefikOnlineConfig', 'traefik_online_template', '{\n  \"apiVersion\": \"extensions/v1beta1\",\n \"kind\": \"Ingress\",\n  \"metadata\": {\n   \"annotations\": {\n      \"traefik.ingress.kubernetes.io/router.entrypoints\": \"fl-online\",\n      \"traefik.ingress.kubernetes.io/router.middlewares\": \"flowengine-fl-stripurl@kubernetescrd\"\n    },\n    \"labels\": {\n     \"app\": \"fl-traefik\"\n   },\n    \"name\": \"${ingressName}\"\n  },\n  \"spec\": {\n   \"rules\": [{\n     \"http\": {\n       \"paths\": [{\n         \"backend\": {\n            \"serviceName\": \"${serviceName}\",\n             \"servicePort\":  ${servicePort}\n         },\n          \"path\": \"${gatewayUri}\"\n       }]\n      }\n   }]\n  }\n}', NULL, 3);
+>```
 
 
 
