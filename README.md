@@ -185,7 +185,7 @@ metadata:
 
 > 注意，创建引擎的方案可使用该repo中examples目录的方案，另外引擎绑定的数据库地址应在"设定"->"数据库配置信息"中:
 > "数据库默认开关"设置为false，数据库相关参数设置为实际配置。
-> 对于低版本k8s，还需要执行如下sql，保证兼容ingress
+> 对于低版本k8s(<1.18)，还需要执行如下sql，保证兼容ingress
 > ```
 > delete from automl_manager_dict_value where dict_id = '4';
 > INSERT INTO `automl_manager_dict_value` (`id`, `dict_id`, `value_name`, `value_code`, `value`, `remark`, `value_order`)
