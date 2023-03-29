@@ -170,7 +170,7 @@ kubectl run my-mariadb-client --rm --tty -i --restart='Never' --image  docker.io
  SET PASSWORD FOR 'root'@'%' = PASSWORD('123456');
  参考此文档 https://mariadb.org/mariadb-k8s-create-a-secret-and-use-it-in-mariadb-deployment/
  创建secret: 
- $ echo -n '123456' >./password.txt 
+ echo -n '123456' >./password.txt 
  kubectl create secret generic mariadb-secret  --from-file=mariadb-root-password=./password.txt -n flowengine
  修改statefuset配置kubectl edit statefulset my-mariadb -n flowengine，绑定
  - name: MARIADB_ROOT_PASSWORD
