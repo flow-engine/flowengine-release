@@ -181,6 +181,8 @@ kubectl run my-mariadb-client --rm --tty -i --restart='Never' --image  docker.io
  如果未操作此步，会出现mariadb循环重启的现象。
 ```
 
+* 工作区配置
+
 可以通过以下配置创建flowengine管理的ns，创建fl-ns.yaml,内容如下：
 
 ```
