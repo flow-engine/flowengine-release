@@ -34,10 +34,10 @@
 #### 依赖镜像
 
 * flowengine/flowengine-ui:0.0.3.2
-* flowengine/engine-manager:0.0.3.2-beta
+* flowengine/engine-manager:0.0.3.2-beta2
 * flowengine/data:0.0.2
-* flowengine/hub:0.0.3.2-beta
-* flowengine/engine-kernel:0.0.3.2-beta（有机器学习需要的可以下载flowengine/engine-kernel:0.0.3.2-ml，也可以自己根据文档定制）
+* flowengine/hub:0.0.3.2-beta2
+* flowengine/engine-kernel:0.0.3.2-beta2（有机器学习需要的可以下载flowengine/engine-kernel:0.0.3.2-ml2，也可以自己根据文档定制）
 * flowengine/func-pipeline-runtime:0.0.2
 * traefik:v2.5
 
@@ -197,7 +197,10 @@ metadata:
 ```
 
 执行`kubectl apply -f fl-ns.yaml`即可创建。
+> 也可直接使用examples目录里的fl-test-workspace.yaml创建。
+
 实际上，你也可以通过在已有ns里增加上述annotation和labels来将其交给flowengine托管。
+
 
 至此，flowengine已安装完成，管理后台地址：http://{entry_ip}:31101，用户名密码admin/admin，enjoy it！
 
@@ -213,7 +216,10 @@ metadata:
 > |------------|------------|-----------------|---------------------------|
 > ```
 
-> 注意，创建引擎的方案可使用该repo中examples目录的方案，另外引擎绑定的数据库地址应在"设定"->"数据库配置信息"中:
+* 导入或者创建方案创建引擎。
+在创建引擎之前，确保hub中有要选择的方案，并且方案状态处于"已发布"状态。如果不会创建方案，导入example中的默认asol，创建方案。
+
+>  注意，方案中默认设置了引擎依赖的数据库配置，可以酌情修改，如果想要全局对接数据库，可在"设定"->"数据库配置信息"中:
 > "数据库默认开关"设置为false，数据库相关参数设置为实际配置。
 >
 > 对于低版本k8s(<=1.18)，还需要执行如下sql，保证启动的engine兼容ingress，更新sql完成后，重启fl-engine-manager服务。
@@ -226,3 +232,6 @@ metadata:
 >    (11, 4, 'scIngressTemplate', 'sc_ingress_template', '{\n  \"apiVersion\": \"extensions/v1beta1\",\n  \"kind\": \"Ingress\",\n  \"metadata\": {\n   \"annotations\": {\n      \"traefik.ingress.kubernetes.io/router.entrypoints\": \"flowengine\",\n     \"traefik.ingress.kubernetes.io/router.middlewares\": \"flowengine-fl-stripurl@kubernetescrd\"\n    },\n    \"labels\": {\n     \"app\": \"fl-traefik\"\n   },\n    \"name\": \"${ingressName}\"\n  },\n  \"spec\": {\n   \"rules\": [{\n     \"http\": {\n       \"paths\": [{\n         \"backend\": {\n            \"serviceName\": \"${serviceName}\",\n            \"servicePort\": ${servicePort}\n         },\n          \"path\": \"/automl-engine/${engineKey}/${moduleId}/${scId}\"\n       }, {\n          \"backend\": {\n            \"serviceName\": \"${serviceName}\",\n            \"servicePort\": ${servicePort}\n            },\n          \"path\": \"/automl-engine/${scKey}/${moduleId}/${scId}\"\n       }]\n      }\n   }]\n  }\n}', NULL, 2),
 >    (12, 4, 'traefikOnlineConfig', 'traefik_online_template', '{\n  \"apiVersion\": \"extensions/v1beta1\",\n \"kind\": \"Ingress\",\n  \"metadata\": {\n   \"annotations\": {\n      \"traefik.ingress.kubernetes.io/router.entrypoints\": \"fl-online\",\n      \"traefik.ingress.kubernetes.io/router.middlewares\": \"flowengine-fl-stripurl@kubernetescrd\"\n    },\n    \"labels\": {\n     \"app\": \"fl-traefik\"\n   },\n    \"name\": \"${ingressName}\"\n  },\n  \"spec\": {\n   \"rules\": [{\n     \"http\": {\n       \"paths\": [{\n         \"backend\": {\n            \"serviceName\": \"${serviceName}\",\n             \"servicePort\":  ${servicePort}\n         },\n          \"path\": \"${gatewayUri}\"\n       }]\n      }\n   }]\n  }\n}', NULL, 3);
 > ```
+
+到此，你就可以创建自己的引擎，进行更深入探索了。
+具体使用方法可参考官方文档:https://flow-engine.github.io/docs/
