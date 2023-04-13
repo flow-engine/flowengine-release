@@ -1,8 +1,13 @@
-# 基础学习环境搭建
-# 基础信息
+# Build the K3S For the local development environment
+# Dependency
+English ｜ [中文](/k3s_install-cn.md)
+
 机器节点（虚拟机virtualbox 6.1）：
 操作系统：
-* centos 7，下载地址：[http://mirrors.aliyun.com/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-2009.iso](http://mirrors.aliyun.com/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-2009.iso)
+* centos 7 CentOS-7-x86_64-Minimal-2009.iso
+* Download link：[http://la.mirrors.clouvider.net/CentOS/7.9.2009/isos/x86_64//CentOS-7-x86_64-Minimal-2009.iso](http://la.mirrors.clouvider.net/CentOS/7.9.2009/isos/x86_64//CentOS-7-x86_64-Minimal-2009.iso) You can find more mirror addresses here http://isoredirect.centos.org/centos/7/isos/x86_64/
+
+
 依赖服务：
 * docker v20.10.17
 * k3s 

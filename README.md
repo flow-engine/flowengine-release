@@ -1,6 +1,7 @@
-# 快速安装体验指南
+# Quick install guide
+English ｜ [中文](/README-cn.md)
 
-### 组成
+### MODULES
 
 * fl-engine-manager
   * service:
@@ -20,14 +21,14 @@
   * service
   * middleware
 
-### 前置依赖
+### Pre-dependencies
 
 #### 安装环境
 
-* kubernetes 最低v1.16.8+,推荐v1.19.16+
-* k3s(个人学习使用)
+* kubernetes higher than v1.16.8+, Recommended Version is higher than v1.19.16+
+* k3s(for local development)
 
-> [k3s安装参考](./k3s_install.md)
+> [k3s Install Guide for local development](./k3s_install.md)
 
 * mysql/mariadb 5.7+
 
@@ -51,7 +52,9 @@
 1. 添加traefik CRD
 
 ```
-(base) ➜  flowengine-release git:(master) ✗ ls
+Check out flowengine-release git:(master) 
+ cd (base) ➜  
+✗ ls
 README.md config    examples  images    tests
 (base) ➜  flowengine-release git:(master) ✗ kubectl apply -f config/1-fl-traefik-crd.yml
 customresourcedefinition.apiextensions.k8s.io/ingressroutes.traefik.containo.us configured
