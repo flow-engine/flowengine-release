@@ -23,7 +23,7 @@ English ｜ [中文](/README-cn.md)
 
 ### Pre-dependencies
 
-#### 安装环境
+#### Install the library
 
 * kubernetes higher than v1.16.8+, Recommended Version is higher than v1.19.16+
 * k3s(for local development)
@@ -141,7 +141,7 @@ flowengine-release#  kubectl get cm -n flowengine
    kube-root-ca.crt                1      113m
 ```
 
-<span style="color:red"> If you want to change the configuration of cm，you need delete pod and restart, then the new configruration will be worked</span>
+> <span style="color:red"> If you want to change the configuration of cm，you need delete pod and restart, then the new configruration will be worked</span>
 
 * Database confirguration
 
@@ -194,7 +194,7 @@ Please change the statefuset
      secretKeyRef:
        key: mariadb-root-password
        name: mariadb-secret
- <span style="color:red"> If you didn't do this，the mariadb will be crashed</span>
+ > <span style="color:red"> If you didn't do this，the mariadb will be crashed</span>
 ```
 
 * The workspace configuration
@@ -242,7 +242,7 @@ Before  you create engine，please select a solution in hub，and the status of 
 
 
 >
->  If k8s/kubectl version lower than 1.18，need to trigger the following sql，保证启动的engine兼容ingress，更新sql完成后，重启fl-engine-manager服务。
+>  If k8s/kubectl version lower than 1.18，need to trigger the following sql，then restart fl-engine-manager service
 >
 > ```
 > delete from automl_manager_dict_value where dict_id = '4';
