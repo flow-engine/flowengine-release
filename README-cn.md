@@ -37,7 +37,7 @@
 * flowengine/engine-manager:0.0.3.2-beta2
 * flowengine/data:0.0.2
 * flowengine/hub:0.0.3.2-beta2
-* flowengine/engine-kernel:0.0.3.2-beta2（有机器学习需要的可以下载flowengine/engine-kernel:0.0.3.2-ml2，也可以自己根据文档定制）
+* flowengine/engine-kernel:0.0.3.2-beta4（有机器学习需要的可以下载flowengine/engine-kernel:0.0.3.2-ml2，也可以自己根据文档定制）
 * flowengine/func-pipeline-runtime:0.0.2
 * traefik:v2.5
 
