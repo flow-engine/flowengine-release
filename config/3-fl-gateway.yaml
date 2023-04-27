@@ -77,35 +77,21 @@ spec:
                 name: fl-ui
                 port:
                   number: 80
-          - path: /automl-manager
+          - path: /engine-manager
             pathType: Prefix
             backend:
               service:
                 name: fl-engine-manager
                 port:
                   number: 80
-          - path: /engine
-            pathType: Prefix
-            backend:
-              service:
-                name: fl-ui
-                port:
-                  number: 80
-          - path: /sds
-            pathType: Prefix
-            backend:
-              service:
-                name: fl-ui
-                port:
-                  number: 80
-          - path: /template-market
+          - path: /hub
             pathType: Prefix
             backend:
               service:
                 name: fl-hub
                 port:
                   number: 80
-          - path: /sds-workbench
+          - path: /data
             pathType: Prefix
             backend:
               service:
@@ -159,8 +145,8 @@ items:
       stripPrefix:
         forceSlash: false
         prefixes:
-          - /template-market
-          - /sds-workbench
+          - /hub
+          - /data
 ---
 apiVersion: v1
 kind: ServiceAccount
