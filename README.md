@@ -34,12 +34,12 @@ English ｜ [中文](/README-cn.md)
 
 #### Images
 
-* flowengine/flowengine-ui:0.0.3.2
-* flowengine/engine-manager:0.0.3.2-beta2
-* flowengine/data:0.0.2
-* flowengine/hub:0.0.3.2-beta2
-* flowengine/engine-kernel:0.0.3.2-beta2（You can use flowengine/engine-kernel:0.0.3.2-ml2 for machine learning，and you can also check the documents for more details）
-* flowengine/func-pipeline-runtime:0.0.2
+* flowengine/flowengine-ui:0.0.3.4
+* flowengine/engine-manager:0.0.3.4
+* flowengine/data:0.0.3.4
+* flowengine/hub:0.0.3.4
+* flowengine/engine-kernel:0.0.3.4（You can use flowengine/engine-kernel:0.0.3.4-ml for machine learning，and you can also check the documents for more details）
+* flowengine/func-pipeline-runtime:0.0.3
 * traefik:v2.5
 
 ### Instructions
