@@ -255,3 +255,16 @@ Before  you create engine，please select a solution in hub，and the status of 
 
 
 Our document is here :https://flow-engine.github.io/docs/
+
+# ReleaseNotes
+
+0.0.3.4 (2023.4.28):
+
+* Unified the URLs of the entire website for easier future iterations.
+* Fixed some usability issues.
+(This version requires running the installation documentation once.)
+* 
+0.0.3.2 (2023.3.20):
+* Fixed some usability issues.
+* Unified the database names and cleaned up unused data.
+* Added beta version functionality for parallel task orchestration.
