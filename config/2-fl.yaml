@@ -107,18 +107,6 @@ items:
                   add_header Last-Modified '';
               }
             }
-
-
-            location /engine {
-              alias /www/html/elf-flowengine-desktop/;
-
-              etag off;
-              if ($request_filename ~* .*.(html|htm)$)
-              {
-                  expires -1;
-                  add_header Last-Modified '';
-              }
-            }
           }
         }
     kind: ConfigMap
@@ -566,7 +554,7 @@ items:
                   value: Asia/Shanghai
                 - name: ACCESS_KEY
                   value: e5f1fc70-7d1d-4f60-9bd6-fd949078adad
-              image: flowengine/data:0.0.2
+              image: flowengine/data:0.0.3.4
               imagePullPolicy: IfNotPresent
               livenessProbe:
                 failureThreshold: 3
