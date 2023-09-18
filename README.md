@@ -38,7 +38,7 @@ English ｜ [中文](/README-cn.md)
 * flowengine/engine-manager:0.0.3.4
 * flowengine/data:0.0.3.4
 * flowengine/hub:0.0.3.4
-* flowengine/engine-kernel:0.0.3.4（You can use flowengine/engine-kernel:0.0.3.4-ml for machine learning，and you can also check the documents for more details）
+* flowengine/engine-kernel:0.0.3.5（You can use flowengine/engine-kernel:0.0.3.5-ml for machine learning，and you can also check the documents for more details）
 * flowengine/func-pipeline-runtime:0.0.3
 * traefik:v2.5
 
