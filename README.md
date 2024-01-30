@@ -257,6 +257,9 @@ Before  you create engine，please select a solution in hub，and the status of 
 Our document is here :https://flow-engine.github.io/docs/
 
 ### ReleaseNotes
+0.0.3.4 (2023.4.28):
+
+* Fixed the issue of incomplete resource cleaning after parallel job execution has finished。
 
 0.0.3.4 (2023.4.28):
 
