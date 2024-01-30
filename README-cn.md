@@ -34,10 +34,10 @@
 #### 依赖镜像
 
 * flowengine/flowengine-ui:0.0.3.4
-* flowengine/engine-manager:0.0.3.4
+* flowengine/engine-manager:0.0.3.5
 * flowengine/data:0.0.3.4
 * flowengine/hub:0.0.3.4
-* flowengine/engine-kernel:0.0.3.4（有机器学习需要的可以下载flowengine/engine-kernel:0.0.3.4-ml，也可以自己根据文档定制）
+* flowengine/engine-kernel:0.0.3.5（有机器学习需要的可以下载flowengine/engine-kernel:0.0.3.5-ml，也可以自己根据文档定制）
 * flowengine/func-pipeline-runtime:0.0.3
 * traefik:v2.5
 
